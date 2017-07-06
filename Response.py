@@ -5,7 +5,7 @@ import tornado.web
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("hello world")
+        self.write("teste mensagem marcel")
 
 def make_app():
     application = tornado.web.Application([(r"/", MainHandler), ])
