@@ -1,16 +1,19 @@
+import os
+import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("hello world")
 
 def make_app():
-    return tornado.web.Application([(r"/", MainHandler), ])
-
+    application = tornado.web.Application([(r"/", MainHandler), ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    port = int(os.environ.get("PORT", 5000))
+    http_server.listen(port)
+    tornado.ioloop.IOLoop.current().start()
 
 if __name__ == "__main__":
-    app = make_app()
-    app.listen(8888)
-    tornado.ioloop.IOLoop.current().start()
+    make_app()    
+    
