@@ -2,10 +2,14 @@ import os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+import json
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("to mostrando para o anderson")
+        response = {'status':'sucesso','resposta':'oi marcel!'}
+        kk = tornado.escape.json_encode(response)
+        kk = wrap_callback(self, kk)
+        self.write(kk)
 
 def make_app():
     application = tornado.web.Application([(r"/", MainHandler), ])
