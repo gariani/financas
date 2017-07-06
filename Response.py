@@ -6,10 +6,14 @@ import json
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        response = {'status':'sucesso','resposta':'oi marcel!'}
-        kk = tornado.escape.json_encode(response)
-        kk = wrap_callback(self, kk)
-        self.write(kk)
+        try:
+            response = {'status':'sucesso','resposta':'oi marcel!'}
+            kk = tornado.escape.json_encode(response)
+            kk = wrap_callback(self, kk)
+            self.write(kk)
+        except Exception e:
+            self.write(json.dumps({'status':'fail','error': "Error: %s" % format_exec()}))
+         
 
 def make_app():
     application = tornado.web.Application([(r"/", MainHandler), ])
