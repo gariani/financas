@@ -20,7 +20,8 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         try:
             _mock = Mock()
-            kk = tornado.escape.json_encode(_mock.mock())
+            _json = json.dumps(_mock.mock())
+            kk = tornado.escape.json_encode(_json)
             self.write(kk)
         except Exception() as e: 
             self.write(json.dumps(
