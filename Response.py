@@ -32,11 +32,10 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         try:
             _mock = Mock()
-            _valor = _mock.mock()
-            response = _valor
-            kk = tornado.escape.json_encode(response)
+            _json = json.dumps(_mock.mock())
+            kk = tornado.escape.json_encode(_json)
             self.write(kk)
-        except Exception() as e: 
+        except Exception() as e:
             self.write(json.dumps(
                 {'status': 'fail', 'error': "Error: %s" % format(e)}))
 
@@ -46,8 +45,7 @@ class IdHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         _id = args[0]
         _mock = Mock()
-        _valor = _mock.mock(_id)
-        self.write(_valor)
+        self.write(_mock.mock(_id))
  
 def make_app():
     application = tornado.web.Application(
