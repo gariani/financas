@@ -33,8 +33,8 @@ class MainHandler(tornado.web.RequestHandler):
         try:
             _mock = Mock()
             _json = json.dumps(_mock.mock())
-            kk = tornado.escape.json_encode(_json)
-            self.write(kk)
+            #kk = tornado.escape.json_encode(_json)
+            self.write(_json)
         except Exception() as e:
             self.write(json.dumps(
                 {'status': 'fail', 'error': "Error: %s" % format(e)}))
