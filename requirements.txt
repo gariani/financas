@@ -1,1 +1,5 @@
 tornado==4.5.1
+aiopg==0.13
+sqlalchemy==1.1.11
+asyncio==3.4.3
+asyncpg==0.12.0

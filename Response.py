@@ -3,6 +3,30 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import json
+import asyncio
+import asyncpg
+from urllib.parse import urlparse
+from urllib.parse import urlsplit
+
+
+class Conexao():
+
+    async def run():
+        url = urlparse(os.environ["DATABASE_URL"])
+        conn = await asyncpg.connect(host=url.hostname,
+                                     port=url.port,
+                                     user=url.username,
+                                     password=url.password,
+                                     database=url.path[1:])
+
+        #conn = await asyncpg.connect(url)
+
+        #values = await conn.fetch('''SELECT * FROM gasto''')
+        await conn.close()
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run())
+
 
 class Mock():
     def mock(self, id=1):
@@ -13,7 +37,7 @@ class Mock():
         dic["realizados"] = "realizados1"
         dic["totalRealizado"] = 10.0
         dic["saldo"] = 190.00
-        return dic 
+        return dic
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -25,15 +49,15 @@ class MainHandler(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
     def options(self):
-        # no body
         self.set_status(204)
-        self.finish()        
-        
+        self.finish()
+
     def get(self):
         try:
+            _conexao = Conexao()
             _mock = Mock()
             _json = json.dumps(_mock.mock())
-            #kk = tornado.escape.json_encode(_json)
+            # kk = tornado.escape.json_encode(_json)
             self.write(_json)
         except Exception() as e:
             self.write(json.dumps(
@@ -41,16 +65,17 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class IdHandler(tornado.web.RequestHandler):
-    
+
     def get(self, *args, **kwargs):
         _id = args[0]
         _mock = Mock()
         self.write(_mock.mock(_id))
- 
+
+
 def make_app():
     application = tornado.web.Application(
         [(r"/", MainHandler),
-         (r"/id/(\d+)$", IdHandler), ], autoreload=True)
+         (r"/id/(\d+)$", IdHandler), ], debug=True, autoreload=True)
     http_server = tornado.httpserver.HTTPServer(application)
     port = int(os.environ.get("PORT", 5000))
     http_server.listen(port)
