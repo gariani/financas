@@ -14,6 +14,12 @@ class Conexao():
     async def run():
         url = urlparse(os.environ["DATABASE_URL"])
         print(url)
+        print(uhostname)
+        print(uport)
+        print(uusername)
+        print(upassword)
+        print(upath[1:])
+
         conn = await asyncpg.connect(host=url.hostname,
                                      port=url.port,
                                      user=url.username,
