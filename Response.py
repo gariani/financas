@@ -13,6 +13,7 @@ class Conexao():
 
     async def run():
         url = urlparse(os.environ["DATABASE_URL"])
+        print(url)
         conn = await asyncpg.connect(host=url.hostname,
                                      port=url.port,
                                      user=url.username,
