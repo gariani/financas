@@ -3,37 +3,39 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import json
-import asyncio
-import asyncpg
-from urllib.parse import urlparse
-from urllib.parse import urlsplit
-
+from PoolConection import PostgresConnectionPool
 
 class Conexao():
+    def __init__(self):
+        self.query_all = """SELECT id, descricao_previsto, valor_previsto, realizado, total_realizado, saldo FROM gasto"""
+        self.query_count = """SELECT * FROM gasto"""
+        self.columns = ('id', 'descricao_previsto', 'valor_previsto', 'realizado', 'total_realizado', 'saldo')
+        self.pool = PostgresConnectionPool(
+            "dbname='d73u6atflfqjbf' user='oivwavjrjjhwnx' host='ec2-23-21-96-159.compute-1.amazonaws.com' password='c42a72b35ed8c8f96008da2be25f5f3f4d32f6bbe4fbec4e1555bcd3237b5da4'",
+            maxsize=3)
 
-    async def run():
-        url = urlparse(os.environ["DATABASE_URL"])
-        print(url)
-        print(url.hostname)
-        print(url.port)
-        print(url.username)
-        print(url.password)
-        print(url.path[1:])
+    def formatar(self, chaves, valores):
+        _results = []
+        for row in valores:
+            _results.append(dict(zip(chaves, row)))
+        return json.dumps(_results)
 
-        conn = await asyncpg.connect(host=url.hostname,
-                                     port=url.port,
-                                     user=url.username,
-                                     password=url.password,
-                                     database=url.path[1:])
+    def execute(self):
+        _valor = self.pool.execute(self.query_count)
+        return self.formatar(('total'), _valor)
 
-        conn = await asyncpg.connect(url)
+    def fetchall(self):
+        _valores = self.pool.fetchall(self.query_all)
+        return self.formatar(self.columns, _valores)
 
-        values = await conn.fetch('''SELECT * FROM gasto''')
-        print("values")
-        await conn.close()
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(run())
+    def fetchone(self, id):
+        _valores = []
+        _valor = self.pool.fetchone("""SELECT * FROM gasto WHERE id={}""".format(id))
+        if _valor is not None:
+            _valores.append(_valor)
+            return self.formatar(self.columns, _valores)
+        else:
+            return self.formatar(['Error'], [('Nao foi encontrado o valor correspondente',)])
 
 
 class Mock():
@@ -63,10 +65,8 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         try:
             _conexao = Conexao()
-            _mock = Mock()
-            _json = json.dumps(_mock.mock())
-            # kk = tornado.escape.json_encode(_json)
-            self.write(_json)
+            _valor = _conexao.fetchall()
+            self.write(_valor)
         except Exception() as e:
             self.write(json.dumps(
                 {'status': 'fail', 'error': "Error: %s" % format(e)}))
@@ -76,9 +76,9 @@ class IdHandler(tornado.web.RequestHandler):
 
     def get(self, *args, **kwargs):
         _id = args[0]
-        _mock = Mock()
-        self.write(_mock.mock(_id))
-
+        _conexao = Conexao()
+        _valor = _conexao.fetchone(_id)
+        self.write(_valor)
 
 def make_app():
     application = tornado.web.Application(
