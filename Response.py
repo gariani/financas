@@ -19,9 +19,10 @@ class Conexao():
                                      password=url.password,
                                      database=url.path[1:])
 
-        #conn = await asyncpg.connect(url)
+        conn = await asyncpg.connect(url)
 
-        #values = await conn.fetch('''SELECT * FROM gasto''')
+        values = await conn.fetch('''SELECT * FROM gasto''')
+        print(values)
         await conn.close()
 
     loop = asyncio.get_event_loop()
