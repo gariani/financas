@@ -3,38 +3,27 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import json
-import asyncio
-import asyncpg
 from urllib.parse import urlparse
-from urllib.parse import urlsplit
-
+import psycopg2
 
 class Conexao():
+    # user=oivwavjrjjhwnx
+    # pasword=c42a72b35ed8c8f96008da2be25f5f3f4d32f6bbe4fbec4e1555bcd3237b5da4
+    # hostname=ec2-23-21-96-159.compute-1.amazonaws.com:5432
+    # database=d73u6atflfqjbf
 
-    async def run():
-        url = urlparse(os.environ["DATABASE_URL"])
-        print(url)
-        print(url.hostname)
-        print(url.port)
-        print(url.username)
-        print(url.password)
-        print(url.path[1:])
+    def run(self):
+        # url = urlparse(os.environ["DATABASE_URL"])
+        # print(url)
+        # print(url.hostname)
+        # print(url.port)
+        # print(url.username)
+        # print(url.password)
+        # print(url.path[1:])
 
-        conn = await asyncpg.connect(host=url.hostname,
-                                     port=url.port,
-                                     user=url.username,
-                                     password=url.password,
-                                     database=url.path[1:])
-
-        conn = await asyncpg.connect(url)
-
-        values = await conn.fetch('''SELECT * FROM gasto''')
-        print("values")
-        await conn.close()
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(run())
-
+        # connect_srt = "dbname='{}' user='{}' host='{}' password='{}'".format(url.path[1:],url.username,url.port+':'+url.port,url.password)
+        connect_srt = "dbname='d73u6atflfqjbf' user='oivwavjrjjhwnx' host='ec2-23-21-96-159.compute-1.amazonaws.com:5432' password='c42a72b35ed8c8f96008da2be25f5f3f4d32f6bbe4fbec4e1555bcd3237b5da4'"
+        conn = psycopg2.connect(connect_srt)
 
 class Mock():
     def mock(self, id=1):
@@ -63,6 +52,7 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         try:
             _conexao = Conexao()
+            _conexao.run()
             _mock = Mock()
             _json = json.dumps(_mock.mock())
             # kk = tornado.escape.json_encode(_json)
