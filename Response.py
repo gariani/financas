@@ -22,7 +22,7 @@ class Conexao():
         conn = await asyncpg.connect(url)
 
         values = await conn.fetch('''SELECT * FROM gasto''')
-        print(values)
+        print("values")
         await conn.close()
 
     loop = asyncio.get_event_loop()
