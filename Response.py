@@ -37,23 +37,9 @@ class Conexao():
         else:
             return self.formatar(['Error'], [('Nao foi encontrado o valor correspondente',)])
 
-
-class Mock():
-    def mock(self, id=1):
-        dic = {}
-        dic["id"] = id
-        dic["descricaoPrevisto"] = "Alimentação"
-        dic["valorPrevisto"] = 200.00
-        dic["realizados"] = "realizados1"
-        dic["totalRealizado"] = 10.0
-        dic["saldo"] = 190.00
-        return dic
-
-
 class MainHandler(tornado.web.RequestHandler):
 
     def set_default_headers(self):
-        print("setting headers!!!")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
@@ -68,6 +54,7 @@ class MainHandler(tornado.web.RequestHandler):
             _valor = _conexao.fetchall()
             self.write(_valor)
         except Exception() as e:
+            self.set_status(404)
             self.write(json.dumps(
                 {'status': 'fail', 'error': "Error: %s" % format(e)}))
 
