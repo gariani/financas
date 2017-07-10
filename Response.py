@@ -64,6 +64,7 @@ class MainHandler(tornado.web.RequestHandler):
 
     def get(self):
         try:
+            print("ISAAK")
             _conexao = Conexao()
             _valor = _conexao.fetchall()
             self.write(_valor)
