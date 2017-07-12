@@ -2,8 +2,8 @@ import os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-import json
 from Gasto import *
+
 
 class GastoHandler(tornado.web.RequestHandler):
 
@@ -32,29 +32,30 @@ class GastoHandler(tornado.web.RequestHandler):
             self.write(json.dumps(
                 {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente'}))
 
+
 class RealizadoHandler(tornado.web.RequestHandler):
-    
+
     def get(self, instancia_id: str = None):
         try:
-            realizado: Realizado = Realizadio()
+            realizado: Realizado = Realizado()
             if instancia_id is None:
                 _valor = realizado.fetchall()
             else:
                 _valor = realizado.fetchone(instancia_id)
-            
+
             self.set_status(200)
             self.finish(_valor)
-            
+
         except Exception():
             self.set_status(404)
             self.write(json.dumps(
                 {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente'}))
-            
-            
+
+
 def make_app():
-    
-    route = [(r"/gasto", GastoHandler), (r"/gasto/(\d+)$", GastoHandler), (r"/gasto/realizado/(\d+)$"),]
-    
+    route = [(r"/gasto", GastoHandler), (r"/gasto/(\d+)$", GastoHandler),
+             (r"/gasto/realizado/(\d+)$", RealizadoHandler), ]
+
     application = tornado.web.Application(route, debug=True, autoreload=True)
     http_server = tornado.httpserver.HTTPServer(application)
     port = int(os.environ.get("PORT", 5000))
