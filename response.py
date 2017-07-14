@@ -2,10 +2,10 @@ import os
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-from Gasto import *
+import json
 
 
-class GastoHandler(tornado.web.RequestHandler):
+class MainHandler(tornado.web.RequestHandler):
 
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -16,35 +16,26 @@ class GastoHandler(tornado.web.RequestHandler):
         self.set_status(204)
         self.finish()
 
+
+class GastoHandler(MainHandler):
+
     def get(self, instancia_id: str = None):
 
         try:
-            gasto: Gasto = Gasto()
-            if instancia_id is None:
-                _valor = gasto.fetchall()
-            else:
-                _valor = gasto.fetchone(instancia_id)
 
             self.set_status(200)
-            self.finish(_valor)
         except Exception():
             self.set_status(404)
             self.write(json.dumps(
                 {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente'}))
 
 
-class RealizadoHandler(tornado.web.RequestHandler):
-
+class RealizadoHandler(MainHandler):
     def get(self, instancia_id: str = None):
         try:
-            realizado: Realizado = Realizado()
-            if instancia_id is None:
-                _valor = realizado.fetchall()
-            else:
-                _valor = realizado.fetchone(instancia_id)
-
-            self.set_status(200)
-            self.finish(_valor)
+            x = 1
+            x = x + 1
+            print(x)
 
         except Exception():
             self.set_status(404)
@@ -54,7 +45,7 @@ class RealizadoHandler(tornado.web.RequestHandler):
 
 def make_app():
     route = [(r"/gasto", GastoHandler), (r"/gasto/(\d+)$", GastoHandler),
-             (r"/gasto/realizado/(\d+)$", RealizadoHandler), ]
+             (r"/gasto/(\d+)$/realizado/(\d+)$", RealizadoHandler), ]
 
     application = tornado.web.Application(route, debug=True, autoreload=True)
     http_server = tornado.httpserver.HTTPServer(application)
