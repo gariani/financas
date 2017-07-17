@@ -1,7 +1,7 @@
 from peewee import Model
-from session import connection_pg
+from connection import db
 
 
 class BaseModel(Model):
     class Meta:
-        database = connection_pg
+        database = db
