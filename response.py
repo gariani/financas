@@ -9,8 +9,7 @@ from model.gastomodel import Gasto
 from model.realizadomodel import Realizado
 from connection import db
 
-
-class CreateTables:
+"""class CreateTables:
     db.drop_tables([Gasto, Realizado])
     db.create_tables([Gasto, Realizado], safe=True)
 
@@ -34,7 +33,7 @@ class CreateTables:
             {"id": 9, "descricao": "Teste Realizado 9", "valor": 20.01, "gasto": 2},
             {"id": 10, "descricao": "Teste Realizado 10", "valor": 29.01, "gasto": 3}
         ]).execute()
-
+"""
 
 class MainHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
@@ -80,7 +79,7 @@ class GastoHandler(MainHandler):
             self.set_status(404)
             self.write(json.dumps(
                 {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente'}))
-        except Exception():
+        except Exception:
             self.set_header('Content-Type', 'application/json')
             self.set_status(404)
             self.write(json.dumps(
@@ -100,13 +99,16 @@ class RealizadoHandler(MainHandler):
                     json_retorno = model_to_dict(retorno_realizado)
 
                 else:
-                    json_retorno = (Realizado
-                                    .select(Gasto, Realizado)
-                                    .join(Gasto)
-                                    .where(Gasto.id == instancia_id))
+                    json_retorno = (Gasto
+                                    .select()
+                                    .join(Realizado)
+                                    .where(Gasto.id == instancia_id).naive())
+
+                    # json_retorno = (Gasto.select(Realizado).switch(Gasto).join(Realizado))
 
                     retorno_realizado = []
                     for i in json_retorno:
+                        #print(i)
                         retorno_realizado.append(model_to_dict(i))
 
                     json_retorno = json.dumps(retorno_realizado)
@@ -128,7 +130,7 @@ class RealizadoHandler(MainHandler):
             self.set_header('Content-Type', 'application/json')
             self.write(json.dumps(
                 {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente'}))
-        except Exception():
+        except Exception:
             self.set_status(404)
             self.set_header('Content-Type', 'application/json')
             self.write(json.dumps(
