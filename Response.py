@@ -26,9 +26,11 @@ class GastoHandler(tornado.web.RequestHandler):
                 _valor = gasto.fetchone(instancia_id)
 
             self.set_status(200)
+            self.set_header('Content-Type', 'application/json')
             self.finish(_valor)
         except Exception():
             self.set_status(404)
+            self.set_header('Content-Type', 'application/json')
             self.write(json.dumps(
                 {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente'}))
 
