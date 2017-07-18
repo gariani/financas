@@ -53,8 +53,10 @@ class RealizadoHandler(tornado.web.RequestHandler):
 
 
 def make_app():
-    route = [(r"/gasto", GastoHandler), (r"/gasto/(\d+)$", GastoHandler),
-             (r"/gasto/realizado/(\d+)$", RealizadoHandler), ]
+    route = [(r"/gasto", GastoHandler),
+             (r"/gasto/(\d+)$", GastoHandler),
+             (r"/gasto\/(\d+)\/realizado", RealizadoHandler),
+             (r"/gasto\/(\d+)\/realizado\/(\d+)", RealizadoHandler), ]
 
     application = tornado.web.Application(route, debug=True, autoreload=True)
     http_server = tornado.httpserver.HTTPServer(application)
