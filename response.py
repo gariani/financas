@@ -85,12 +85,15 @@ class GastoHandler(MainHandler):
         if not dict.get('descricao_previsto'):
             b = True
             descPrevisto = 'descricao previsto'
+
         if not dict.get('valor_previsto'):
             b = True
             valorPrevisto = 'valor previsto'
+
         if not dict.get('total_realizado'):
             b = True
             totalRealizado = 'total realizado'
+            
         if not dict.get('saldo'):
             b = True
             sal = 'saldo'
