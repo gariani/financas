@@ -4,6 +4,8 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 
+from tornado import escape
+from collections import defaultdict
 from playhouse.shortcuts import model_to_dict, dict_to_model
 from model.gastomodel import Gasto
 from model.realizadomodel import Realizado
@@ -35,6 +37,15 @@ from connection import db
         ]).execute()
 """
 
+
+class ErrorDadosObrigatorio(Exception):
+    def __init__(self, code):
+        self.code = code
+
+    def __str__(self):
+        return repr(self.code)
+
+
 class MainHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -57,6 +68,53 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class GastoHandler(MainHandler):
+    def salvarDados(self, dados):
+        print(dados)
+        # for i in dados:
+        Gasto.auto_increment = True
+        Gasto.insert(**dados).execute()
+
+    def validadados(self, dict):
+        json_retorno = {}
+        b: bool = False
+        # if (dict['id'] == None):
+        #    json_retorno['erroid'] = 'Campo ''id'' obrigatorio'
+
+        aux = '{descricao_previsto}, {valor_previsto}, {total_realizado}, {saldo}'
+
+        if not dict.get('descricao_previsto'):
+            b = True
+            descPrevisto = 'descricao previsto'
+        if not dict.get('valor_previsto'):
+            b = True
+            valorPrevisto = 'valor previsto'
+        if not dict.get('total_realizado'):
+            b = True
+            totalRealizado = 'total realizado'
+        if not dict.get('saldo'):
+            b = True
+            sal = 'saldo'
+
+        if not b:
+            self.salvarDados(dict)
+        else:
+            aux.format_map(defaultdict(str, descricao_previsto=descPrevisto, valor_previsto=valorPrevisto,
+                                       total_realizado=totalRealizado, saldo=sal))
+            print(aux)
+            # s = json.dumps(json_retorno)
+            raise ErrorDadosObrigatorio(json_retorno)
+
+    def post(self):
+        try:
+            data_json = escape.json_decode(self.request.body)[0]
+            self.validadados(data_json)
+        except ErrorDadosObrigatorio as e:
+            formataMensagem = {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente',
+                               'incorreto': [e.code]}
+            self.set_header('Content-Type', 'application/json')
+            self.set_status(400)
+            self.write(json.dumps(formataMensagem))
+
     def get(self, instancia_id: str = None):
 
         try:
@@ -103,12 +161,8 @@ class RealizadoHandler(MainHandler):
                                     .select()
                                     .join(Realizado)
                                     .where(Gasto.id == instancia_id).naive())
-
-                    # json_retorno = (Gasto.select(Realizado).switch(Gasto).join(Realizado))
-
                     retorno_realizado = []
                     for i in json_retorno:
-                        #print(i)
                         retorno_realizado.append(model_to_dict(i))
 
                     json_retorno = json.dumps(retorno_realizado)
