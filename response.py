@@ -35,6 +35,8 @@ from connection import db
             {"id": 9, "descricao": "Teste Realizado 9", "valor": 20.01, "gasto": 2},
             {"id": 10, "descricao": "Teste Realizado 10", "valor": 29.01, "gasto": 3}
         ]).execute()
+        
+        Teste
 """
 
 
