@@ -70,50 +70,19 @@ class MainHandler(tornado.web.RequestHandler):
 class GastoHandler(MainHandler):
     def salvarDados(self, dados):
         print(dados)
-        # for i in dados:
-        Gasto.auto_increment = True
-        Gasto.insert(**dados).execute()
-
-    def validadados(self, dict):
-        json_retorno = {}
-        b: bool = False
-        # if (dict['id'] == None):
-        #    json_retorno['erroid'] = 'Campo ''id'' obrigatorio'
-
-        aux = '{descricao_previsto}, {valor_previsto}, {total_realizado}, {saldo}'
-
-        if not dict.get('descricao_previsto'):
-            b = True
-            descPrevisto = 'descricao previsto'
-
-        if not dict.get('valor_previsto'):
-            b = True
-            valorPrevisto = 'valor previsto'
-
-        if not dict.get('total_realizado'):
-            b = True
-            totalRealizado = 'total realizado'
-
-        if not dict.get('saldo'):
-            b = True
-            sal = 'saldo'
-
-        if not b:
-            self.salvarDados(dict)
-        else:
-            aux.format_map(defaultdict(str, descricao_previsto=descPrevisto, valor_previsto=valorPrevisto,
-                                       total_realizado=totalRealizado, saldo=sal))
-            print(aux)
-            # s = json.dumps(json_retorno)
-            raise ErrorDadosObrigatorio(json_retorno)
+        novo_gasto = Gasto.create(descricao_previsto=dados['descricao_previsto'],
+                                  valor_previsto=dados['valor_previsto'],
+                                  total_realizado=dados['total_realizado'],
+                                  saldo=dados['saldo'])
+        return novo_gasto
 
     def post(self):
         try:
-            data_json = escape.json_decode(self.request.body)[0]
-            self.validadados(data_json)
+            data_json = escape.json_decode(self.request.body)
+            gasto = self.salvarDados(data_json)
+            self.write(json.dumps(model_to_dict(gasto)))
         except ErrorDadosObrigatorio as e:
-            formataMensagem = {'status': 'fail', 'Error:': 'Nao foi encontrado o valor correspondente',
-                               'incorreto': [e.code]}
+            formataMensagem = {'error': str(e)}
             self.set_header('Content-Type', 'application/json')
             self.set_status(400)
             self.write(json.dumps(formataMensagem))
@@ -148,22 +117,41 @@ class GastoHandler(MainHandler):
 
 
 class RealizadoHandler(MainHandler):
+    def selecionar_gasto(self, id_gasto):
+        return Gasto.select().where(Gasto.id == id_gasto)
+
+    def salvar_dados(self, dados):
+        gasto = self.selecionar_gasto(dados['gasto_id'])
+        realizado = Realizado.create(descricao=dados['descricao'],
+                                     valor=dados['valor'],
+                                     gasto=gasto)
+        return realizado
+
+    def post(self, instancia_id: str = None):
+        try:
+            if instancia_id:
+                dados_json = escape.json_decode(self.request.body)
+                realizado = self.salvar_dados(dados_json)
+                self.write(json.dumps(model_to_dict(realizado)))
+        except Exception as e:
+            print(str(e))
+
     def get(self, instancia_id: str = None, instancia_id2: str = None):
         try:
             if instancia_id:
                 if instancia_id2:
                     retorno_realizado = (Realizado
-                                         .select()
+                                         .select(Realizado.id, Realizado.descricao, Realizado.valor)
                                          .where((Realizado.gasto_id == instancia_id),
                                                 (Realizado.id == instancia_id2)).get())
                     print(retorno_realizado._data)
                     json_retorno = model_to_dict(retorno_realizado)
 
                 else:
-                    json_retorno = (Gasto
-                                    .select()
-                                    .join(Realizado)
-                                    .where(Gasto.id == instancia_id).naive())
+                    json_retorno = (Realizado
+                                    .select(Realizado.id, Realizado.descricao, Realizado.valor)
+                                    .join(Gasto)
+                                    .where(Gasto.id == instancia_id))
                     retorno_realizado = []
                     for i in json_retorno:
                         retorno_realizado.append(model_to_dict(i))
