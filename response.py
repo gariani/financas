@@ -168,6 +168,7 @@ class RealizadoHandler(MainHandler):
             else:
                 retorno_realizado = (Realizado.select())
                 dict = []
+                print('teste')
                 for i in retorno_realizado:
                     dict.append(model_to_dict(i))
                 json_retorno = json.dumps(dict)
