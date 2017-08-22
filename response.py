@@ -80,9 +80,12 @@ class GastoHandler(MainHandler):
 
     def post(self):
         try:
-            data_json = escape.json_decode(self.request.body)
-            gasto = self.salvarDados(data_json)
-            self.write(json.dumps(model_to_dict(gasto)))
+            if self.request.body:
+                data_json = escape.json_decode(self.request.body)
+                gasto = self.salvarDados(data_json)
+                self.write(json.dumps(model_to_dict(gasto)))
+            else:
+                self.write('vazio')
         except ErrorDadosObrigatorio as e:
             formataMensagem = {'error': str(e)}
             self.set_header('Content-Type', 'application/json')
@@ -132,9 +135,10 @@ class RealizadoHandler(MainHandler):
     def post(self, instancia_id: str = None):
         try:
             if instancia_id:
-                dados_json = escape.json_decode(self.request.body)
-                realizado = self.salvar_dados(dados_json)
-                self.write(json.dumps(model_to_dict(realizado)))
+                if self.request.body:
+                    dados_json = escape.json_decode(self.request.body)
+                    realizado = self.salvar_dados(dados_json)
+                    self.write(json.dumps(model_to_dict(realizado)))
         except Exception as e:
             print(str(e))
 
