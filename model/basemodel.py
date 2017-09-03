@@ -1,5 +1,6 @@
 from peewee import Model
-from connection import db
+
+from conexao.connection import db
 
 
 class BaseModel(Model):

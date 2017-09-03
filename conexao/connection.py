@@ -1,4 +1,4 @@
-from playhouse.pool import PostgresqlDatabase, PooledPostgresqlExtDatabase
+from playhouse.pool import PostgresqlDatabase
 
 db = PostgresqlDatabase(
     database='d73u6atflfqjbf',
