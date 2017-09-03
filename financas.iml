@@ -16,6 +16,7 @@
       <sourceFolder url="file://$MODULE_DIR$/handler" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/model" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/connection" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/conn" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

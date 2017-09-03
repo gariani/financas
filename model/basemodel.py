@@ -1,6 +1,6 @@
 from peewee import Model
 
-from connection \
+from conn.connection \
     import db
 
 

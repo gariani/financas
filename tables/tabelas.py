@@ -1,6 +1,6 @@
 from model_.realizadomodel import Realizado
 
-from connection import db
+from conn.connection import db
 from model.gastomodel import Gasto
 
 
