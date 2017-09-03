@@ -1,5 +1,4 @@
 import json
-
 from model.gastomodel import Gasto
 from playhouse.shortcuts import model_to_dict
 
