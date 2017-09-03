@@ -9,8 +9,8 @@
     </database>
     <schema id="3" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-07-16.22:54:31.436</IntrospectionTimestamp>
-      <IntrospectionStateNumber>18410052</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2017-09-02.21:46:16.618</IntrospectionTimestamp>
+      <IntrospectionStateNumber>93433939</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -30,8 +30,8 @@
       <ObjectId>13003</ObjectId>
     </schema>
     <sequence id="9" parent="3" name="gasto_id_seq">
-      <ObjectId>10809221</ObjectId>
-      <StateNumber>18410008</StateNumber>
+      <ObjectId>10809916</ObjectId>
+      <StateNumber>18439219</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
       <BelongsToColumn>1</BelongsToColumn>
     </sequence>
@@ -41,63 +41,59 @@
       <SequenceIdentity>1</SequenceIdentity>
     </sequence>
     <sequence id="11" parent="3" name="realizado_id_seq">
-      <ObjectId>10809232</ObjectId>
-      <StateNumber>18410037</StateNumber>
+      <ObjectId>10809924</ObjectId>
+      <StateNumber>18439220</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
       <BelongsToColumn>1</BelongsToColumn>
     </sequence>
     <table id="12" parent="3" name="gasto">
-      <ObjectId>10809223</ObjectId>
-      <StateNumber>18410037</StateNumber>
+      <ObjectId>10809918</ObjectId>
+      <StateNumber>18439220</StateNumber>
     </table>
     <table id="13" parent="3" name="realizado">
-      <ObjectId>10809234</ObjectId>
-      <StateNumber>18410037</StateNumber>
+      <ObjectId>10809926</ObjectId>
+      <StateNumber>18439220</StateNumber>
     </table>
     <column id="14" parent="12" name="id">
       <Position>1</Position>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>18410008</StateNumber>
+      <StateNumber>18439219</StateNumber>
       <SequenceName>gasto_id_seq</SequenceName>
       <DefaultExpression>nextval(&apos;gasto_id_seq&apos;::regclass)</DefaultExpression>
     </column>
     <column id="15" parent="12" name="descricao_previsto">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410008</StateNumber>
+      <StateNumber>93433868</StateNumber>
     </column>
     <column id="16" parent="12" name="valor_previsto">
       <Position>3</Position>
       <DataType>real|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410008</StateNumber>
+      <StateNumber>93433869</StateNumber>
     </column>
     <column id="17" parent="12" name="total_realizado">
       <Position>4</Position>
       <DataType>real|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410008</StateNumber>
+      <StateNumber>93433870</StateNumber>
     </column>
     <column id="18" parent="12" name="saldo">
       <Position>5</Position>
       <DataType>real|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410008</StateNumber>
+      <StateNumber>93433871</StateNumber>
     </column>
     <column id="19" parent="12" name="created_at">
       <Position>6</Position>
       <DataType>date|0</DataType>
-      <StateNumber>18410008</StateNumber>
+      <StateNumber>18439219</StateNumber>
     </column>
     <index id="20" parent="12" name="gasto_pkey">
-      <ObjectId>10809227</ObjectId>
+      <ObjectId>10809922</ObjectId>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="21" parent="12" name="gasto_pkey">
-      <ObjectId>10809228</ObjectId>
+      <ObjectId>10809923</ObjectId>
       <ColNames>id</ColNames>
       <UnderlyingIndexName>gasto_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
@@ -106,45 +102,42 @@
       <Position>1</Position>
       <DataType>integer|0</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>18410037</StateNumber>
+      <StateNumber>18439220</StateNumber>
       <SequenceName>realizado_id_seq</SequenceName>
       <DefaultExpression>nextval(&apos;realizado_id_seq&apos;::regclass)</DefaultExpression>
     </column>
     <column id="23" parent="13" name="descricao">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410037</StateNumber>
+      <StateNumber>93433936</StateNumber>
     </column>
     <column id="24" parent="13" name="valor">
       <Position>3</Position>
       <DataType>real|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410037</StateNumber>
+      <StateNumber>93433937</StateNumber>
     </column>
     <column id="25" parent="13" name="gasto_id">
       <Position>4</Position>
       <DataType>integer|0</DataType>
-      <NotNull>1</NotNull>
-      <StateNumber>18410037</StateNumber>
+      <StateNumber>93433939</StateNumber>
     </column>
     <index id="26" parent="13" name="realizado_pkey">
-      <ObjectId>10809238</ObjectId>
+      <ObjectId>10809930</ObjectId>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
     <index id="27" parent="13" name="realizado_gasto_id">
-      <ObjectId>10809245</ObjectId>
+      <ObjectId>10809937</ObjectId>
       <ColNames>gasto_id</ColNames>
     </index>
     <key id="28" parent="13" name="realizado_pkey">
-      <ObjectId>10809239</ObjectId>
+      <ObjectId>10809931</ObjectId>
       <ColNames>id</ColNames>
       <UnderlyingIndexName>realizado_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
     <foreign-key id="29" parent="13" name="realizado_gasto_id_fkey">
-      <ObjectId>10809240</ObjectId>
+      <ObjectId>10809932</ObjectId>
       <ColNames>gasto_id</ColNames>
       <RefTableName>gasto</RefTableName>
       <RefKeyName>gasto_pkey</RefKeyName>

@@ -24,9 +24,6 @@ class RealizadoHandler(MainHandler):
 
     def post(self, instancia_id: str = None):
 
-        if not self.valid_arguments():
-            raise HTTPError("Argumentos invalidos")
-
         try:
             if instancia_id:
                 if self.request.body:
@@ -37,9 +34,6 @@ class RealizadoHandler(MainHandler):
             self.falha(str(e))
 
     def get(self, instancia_id: str = None, instancia_id2: str = None):
-
-        if not self.valid_arguments():
-            raise HTTPError("Argumentos invalidos")
 
         try:
             if instancia_id:
