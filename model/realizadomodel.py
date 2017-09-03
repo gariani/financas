@@ -1,5 +1,5 @@
-from peewee import BigIntegerField, CharField, FloatField, PrimaryKeyField, ForeignKeyField
 from model.basemodel import BaseModel
+from peewee import CharField, FloatField, PrimaryKeyField, ForeignKeyField
 from model.gastomodel import Gasto
 
 

@@ -1,4 +1,4 @@
-from peewee import CharField, FloatField, DateField, PrimaryKeyField, ForeignKeyField
+from peewee import CharField, FloatField, DateField, PrimaryKeyField
 from model.basemodel import BaseModel
 
 

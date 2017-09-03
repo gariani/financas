@@ -1,6 +1,8 @@
-import tornado
 import json
-from conexao.connection import db
+
+import tornado
+
+from connection import db
 
 
 class MainHandler(tornado.web.RequestHandler):

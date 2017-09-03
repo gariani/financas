@@ -1,6 +1,7 @@
-from conexao.connection import db
+from model_.realizadomodel import Realizado
+
+from connection.connection import db
 from model.gastomodel import Gasto
-from model.realizadomodel import Realizado
 
 
 class CreateTables:
