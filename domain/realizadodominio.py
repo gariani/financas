@@ -21,6 +21,7 @@ class RealizadoDominio:
 
         if not id_gasto:
             raise Exception("informe o gasto correspondente")
+
         gasto = self.selecionar_gasto(id_gasto)
         dados_json = json.loads(dados)
         retorno = self.salvar_realizado(gasto, dados_json)
@@ -42,3 +43,20 @@ class RealizadoDominio:
         for i in json_retorno:
             retorno_realizado.append(model_to_dict(i))
         return json.dumps(retorno_realizado)
+
+    def atualizar(self, id_gasto, id_realizado, dados):
+
+        gasto = Gasto.select().where(Gasto.id == id_gasto)
+        if not gasto:
+            raise Exception('nao existe gasto com este valor')
+
+        if 'descricao' in dados:
+            query = Realizado.update(descricao=dados['descricao']) \
+                .where((Realizado.id == id_realizado),
+                       (Realizado.gasto_id == id_gasto))
+            query.execute()
+        if 'valor' in dados:
+            query = Realizado.update(valor=dados['valor']) \
+                .where((Realizado.id == id_realizado),
+                       (Realizado.gasto_id == id_gasto))
+            query.execute()

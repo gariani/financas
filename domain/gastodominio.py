@@ -26,3 +26,22 @@ class GastoDominio:
             retorno_gasto.append(i._data)
 
         return json.dumps(retorno_gasto)
+
+    def atualizar(self, id_gasto, dados):
+
+        if 'descricao_previsto' in dados:
+            query = Gasto.update(descricao_previsto=dados['descricao_previsto']) \
+                .where(Gasto.id == id_gasto)
+            query.execute()
+        if 'valor_previsto' in dados:
+            query = Gasto.update(valor_previsto=dados['valor_previsto']) \
+                .where(Gasto.id == id_gasto)
+            query.execute()
+        if 'total_realizado' in dados:
+            query = Gasto.update(total_realizado=dados['total_realizado']) \
+                .where(Gasto.id == id_gasto)
+            query.execute()
+        if 'saldo' in dados:
+            query = Gasto.update(saldo=dados['saldo']) \
+                .where(Gasto.id == id_gasto)
+            query.execute()
