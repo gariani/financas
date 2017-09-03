@@ -1,6 +1,5 @@
 from tornado import escape
 from handler.mainhandler import MainHandler
-from model.realizadomodel import Realizado
 from domain.realizadodominio import RealizadoDominio
 
 

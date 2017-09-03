@@ -1,9 +1,6 @@
 import json
-
 import tornado
-
-
-# from connection import db
+from connection import db
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -16,15 +13,15 @@ class MainHandler(tornado.web.RequestHandler):
         self.set_status(204)
         self.finish()
 
-        # def prepare(self):
-        # if db.is_closed():
-        #    db.connect()
-        # return super(MainHandler, self).prepare()
+    def prepare(self):
+        if db.is_closed():
+            db.connect()
+        return super(MainHandler, self).prepare()
 
-        # def on_finish(self):
-        # if not db.is_closed():
-        #    db.close()
-        #return super(MainHandler, self).on_finish()
+    def on_finish(self):
+        if not db.is_closed():
+            db.close()
+        return super(MainHandler, self).on_finish()
 
     def sucesso(self, json_retorno):
         self.write(json_retorno)

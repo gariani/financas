@@ -1,5 +1,4 @@
 from tornado import escape
-from model.gastomodel import Gasto
 from handler.mainhandler import MainHandler
 from domain.gastodominio import GastoDominio
 
