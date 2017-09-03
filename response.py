@@ -12,7 +12,7 @@ def make_app():
              (r"/gasto\/(\d+)\/realizado", RealizadoHandler),
              (r"/gasto\/(\d+)\/realizado\/(\d+)", RealizadoHandler), ]
 
-    application = tornado.web.Application(route, debug=True, autoreload=True)
+    application = tornado.web.Application(route, debug=False, autoreload=True)
     http_server = tornado.httpserver.HTTPServer(application)
     port = int(os.environ.get("PORT", 5000))
     http_server.listen(port)
