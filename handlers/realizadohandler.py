@@ -4,10 +4,10 @@ from playhouse.shortcuts import model_to_dict
 from model.gastomodel import Gasto
 from model.realizadomodel import Realizado
 from handlers.mainhandler import MainHandler
-from tornado.web import HTTPError
 
 
 class RealizadoHandler(MainHandler):
+
     def selecionar_gasto(self, id_gasto):
         return Gasto.select().where(Gasto.id == id_gasto)
 
@@ -65,7 +65,7 @@ class RealizadoHandler(MainHandler):
                     dic.append(model_to_dict(i))
                 json_retorno = json.dumps(dic)
 
-            self.sucesso(self, json_retorno)
+            self.sucesso(json_retorno)
         except Realizado.DoesNotExist:
             self.falha('Nao foi encontrado o valor correspondente.')
         except Exception as e:
