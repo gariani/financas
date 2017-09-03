@@ -1,6 +1,6 @@
 from peewee import Model
 
-from connection import db
+from connection import *
 
 
 class BaseModel(Model):
