@@ -15,9 +15,6 @@ class GastoHandler(MainHandler):
 
     def post(self):
 
-        if not self.valid_arguments():
-            raise HTTPError("Argumentos invalidos")
-
         try:
             if self.request.body:
                 data_json = escape.json_decode(self.request.body)
@@ -30,9 +27,6 @@ class GastoHandler(MainHandler):
             self.falha(e.__str__())
 
     def get(self, instancia_id: str = None):
-
-        if not self.valid_arguments():
-            raise HTTPError("Argumentos invalidos")
 
         try:
             if instancia_id:
