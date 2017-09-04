@@ -1,9 +1,17 @@
 import json
 from model.gastomodel import Gasto
+from model.realizadomodel import Realizado
 from playhouse.shortcuts import model_to_dict
 
 
 class GastoDominio:
+    def delete(self, id_gasto):
+        realizado = Realizado.delete().where(Realizado.gasto_id == id_gasto)
+        realizado.execute()
+        retorno = Gasto.delete().where(Gasto.id == id_gasto)
+        num = retorno.execute()
+        return {'excluido': num}
+
     def salvar_dados(self, dados):
         retorno = Gasto.create(descricao_previsto=dados['descricao_previsto'],
                                valor_previsto=dados['valor_previsto'],

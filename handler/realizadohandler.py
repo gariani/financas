@@ -1,10 +1,27 @@
 from tornado import escape
+from psycopg2 import IntegrityError
 from handler.mainhandler import MainHandler
 from domain.realizadodominio import RealizadoDominio
 
 
 class RealizadoHandler(MainHandler):
     realizado_dominio = RealizadoDominio()
+
+    def delete(self, instancia_id, instancia_id2):
+        try:
+            if instancia_id:
+                if instancia_id2:
+                    if self.request.body:
+                        retorno = self.realizado_dominio.delete(instancia_id, instancia_id2)
+                        self.sucesso(retorno)
+                else:
+                    raise Exception('Informe um id valido para realizado')
+            else:
+                raise Exception('Informe um id valido para gasto')
+        except IntegrityError as e:
+            self.falha('exclua os dados realizados antes')
+        except Exception as e:
+            self.falha(str(e))
 
     def put(self, instancia_id, instancia_id2):
         try:
@@ -45,7 +62,5 @@ class RealizadoHandler(MainHandler):
             else:
                 raise Exception('deve-se informar o gasto desejado')
             self.sucesso(json_retorno)
-        except Realizado.DoesNotExist:
-            self.falha('Nao foi encontrado o valor correspondente.')
         except Exception as e:
             self.falha(str(e))

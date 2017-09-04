@@ -1,10 +1,24 @@
 from tornado import escape
+from psycopg2 import IntegrityError
 from handler.mainhandler import MainHandler
 from domain.gastodominio import GastoDominio
 
 
 class GastoHandler(MainHandler):
     gasto_dominio = GastoDominio()
+
+    def delete(self, instancia_id: str = None):
+        try:
+            if instancia_id:
+                if self.request.body:
+                    retorno = self.gasto_dominio.delete(instancia_id)
+                    self.sucesso(retorno)
+            else:
+                raise Exception('Informe um id valido para gasto')
+        except IntegrityError as e:
+            self.falha('exclua os dados realizados antes')
+        except Exception as e:
+            self.falha(str(e))
 
     def put(self, instancia_id: str = None):
         try:

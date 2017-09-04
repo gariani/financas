@@ -6,6 +6,11 @@ from playhouse.shortcuts import model_to_dict
 
 
 class RealizadoDominio:
+    def delete(self, id_gasto, id_realizado):
+        realizado = Realizado.delete().where((Realizado.id == id_realizado), (Realizado.gasto_id == id_gasto))
+        num = realizado.execute()
+        return {'excluido': num}
+
     def selecionar_gasto(self, id_gasto):
         gasto = Gasto.select().where(Gasto.id == id_gasto)
         if not gasto:
