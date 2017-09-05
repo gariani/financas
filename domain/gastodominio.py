@@ -12,6 +12,10 @@ class GastoDominio:
         num = retorno.execute()
         return {'excluido': num}
 
+    def retorna_novo_id(self):
+        retorno = Gasto.create()
+        return json.dumps(model_to_dict(retorno))
+
     def salvar_dados(self, dados):
         retorno = Gasto.create(descricao_previsto=dados['descricao_previsto'],
                                valor_previsto=dados['valor_previsto'],

@@ -38,7 +38,8 @@ class GastoHandler(MainHandler):
                 retorno = self.gasto_dominio.salvar_dados(data_json)
                 self.sucesso(retorno)
             else:
-                self.falha('nenhum dado informado')
+                retorno = self.gasto_dominio.retorna_novo_id()
+                self.sucesso(retorno)
         except Exception as e:
             self.falha(str(e))
 
